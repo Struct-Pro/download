@@ -1,21 +1,49 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark" data-lang="vi">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MyApp — Download Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <title>Struct Pro — Phần mềm Tra Cốt Thép Bê Tông</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
+    /* ── TOKENS ── */
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --border: #1e1e2e;
-      --accent: #00e5ff;
-      --accent2: #7c3aed;
-      --text: #e8e8f0;
-      --muted: #6b6b80;
-      --success: #00d68f;
-      --warn: #ffb300;
+      --accent:   #3b82f6;
+      --accent2:  #06b6d4;
+      --success:  #10b981;
+      --warn:     #f59e0b;
+      --danger:   #ef4444;
+      --radius:   14px;
+      --trans:    .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* DARK */
+    [data-theme="dark"] {
+      --bg:       #060b12;
+      --bg2:      #0b1420;
+      --surface:  #0f1c2d;
+      --surface2: #152338;
+      --border:   #1e3352;
+      --text:     #dde6f0;
+      --muted:    #4a6b8a;
+      --sub:      #8ca8c4;
+      --logo-txt: #e2ecf8;
+      --grid-c:   rgba(59,130,246,.04);
+      --glow-c:   rgba(59,130,246,.13);
+    }
+    /* LIGHT */
+    [data-theme="light"] {
+      --bg:       #f0f4fa;
+      --bg2:      #e4eaf4;
+      --surface:  #ffffff;
+      --surface2: #f6f9fe;
+      --border:   #c5d3e8;
+      --text:     #0f2040;
+      --muted:    #7a95b4;
+      --sub:      #4a6a8e;
+      --logo-txt: #0f2040;
+      --grid-c:   rgba(59,130,246,.06);
+      --glow-c:   rgba(59,130,246,.09);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,661 +51,858 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background var(--trans), color var(--trans);
     }
 
     /* GRID BG */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image:
-        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
+        linear-gradient(var(--grid-c) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-c) 1px, transparent 1px),
+        linear-gradient(var(--grid-c) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-c) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+      pointer-events: none; z-index: 0;
     }
-
-    /* GLOW ORB */
     body::after {
       content: '';
-      position: fixed;
-      top: -200px; left: 50%;
-      transform: translateX(-50%);
-      width: 800px; height: 500px;
-      background: radial-gradient(ellipse, rgba(124,58,237,0.15) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+      position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 500px;
+      background: radial-gradient(ellipse, var(--glow-c) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
     }
 
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 24px;
-      position: relative;
-      z-index: 1;
-    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-    /* NAV */
+    /* ── NAV ── */
     nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 28px 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 0 18px;
       border-bottom: 1px solid var(--border);
     }
-
     .logo {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text);
+      display: flex; align-items: center; gap: 11px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 22px; font-weight: 800;
+      letter-spacing: -0.8px; color: var(--logo-txt);
+      text-decoration: none;
     }
-
-    .logo span { color: var(--accent); }
-
-    .nav-tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 4px;
-    }
-
-    /* HERO */
-    .hero {
-      padding: 80px 0 60px;
-      text-align: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0,229,255,0.08);
-      border: 1px solid rgba(0,229,255,0.2);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--accent);
-      margin-bottom: 32px;
-      animation: fadeDown 0.6s ease both;
-    }
-
-    .hero-badge::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    .hero h1 {
-      font-size: clamp(42px, 7vw, 76px);
-      font-weight: 800;
-      line-height: 1.0;
-      letter-spacing: -2px;
-      margin-bottom: 20px;
-      animation: fadeDown 0.6s 0.1s ease both;
-    }
-
-    .hero h1 .highlight {
+    .logo-mark {
+      width: 38px; height: 38px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px;
+      box-shadow: 0 4px 18px rgba(59,130,246,.35);
+      flex-shrink: 0;
+      position: relative; overflow: hidden;
     }
-
-    .hero p {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 480px;
-      margin: 0 auto 48px;
-      line-height: 1.6;
-      font-weight: 400;
-      animation: fadeDown 0.6s 0.2s ease both;
+    .logo-mark::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
     }
+    .logo-name .accent { color: var(--accent); }
 
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
 
-    /* DOWNLOAD CARD */
-    .download-card {
+    /* Language toggle */
+    .lang-toggle {
+      display: flex; align-items: center;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeUp 0.6s 0.3s ease both;
-      transition: border-color 0.2s;
+      border-radius: 100px;
+      padding: 3px;
+      gap: 2px;
     }
-
-    .download-card:hover {
-      border-color: rgba(0,229,255,0.3);
-    }
-
-    .download-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0.6;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-
-    .app-info { flex: 1; }
-
-    .version-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      background: rgba(0,229,255,0.1);
-      color: var(--accent);
-      border: 1px solid rgba(0,229,255,0.2);
-      padding: 3px 10px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-
-    .app-name {
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 6px;
-    }
-
-    .app-desc {
-      font-size: 14px;
+    .lang-btn {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: none; cursor: pointer;
+      background: transparent;
       color: var(--muted);
-      line-height: 1.5;
+      transition: all var(--trans);
+      letter-spacing: .5px;
+    }
+    .lang-btn.active {
+      background: var(--accent);
+      color: #fff;
     }
 
-    .release-date {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      text-align: right;
-    }
-
-    /* STATS ROW */
-    .stats-row {
-      display: flex;
-      gap: 24px;
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      flex: 1;
-      min-width: 100px;
-    }
-
-    .stat-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
-
-    .stat-val {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    /* DOWNLOAD BUTTONS */
-    .download-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    .dl-btn {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 20px;
+    /* Theme toggle */
+    .theme-btn {
+      width: 36px; height: 36px;
       border-radius: 10px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      text-decoration: none;
+      background: var(--surface);
       color: var(--text);
-      transition: all 0.2s;
       cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      transition: all var(--trans);
+    }
+    .theme-btn:hover { border-color: var(--accent); }
+
+    .nav-pill {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px; color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 5px 13px; border-radius: 100px;
+      letter-spacing: .5px;
+    }
+
+    /* ── HERO ── */
+    .hero { padding: 64px 0 40px; text-align: center; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,.1);
+      border: 1px solid rgba(59,130,246,.22);
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px; color: var(--accent2);
+      margin-bottom: 26px;
+      animation: fadeDown .5s ease both;
+    }
+    .pulse-dot {
+      width: 6px; height: 6px; background: var(--success);
+      border-radius: 50%; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.25;transform:scale(.6)} }
+
+    .hero h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(40px, 7vw, 72px);
+      font-weight: 800; line-height: 1.02;
+      letter-spacing: -3px;
+      margin-bottom: 18px;
+      animation: fadeDown .5s .07s ease both;
+    }
+    .g1 { background: linear-gradient(135deg, var(--text), var(--sub)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .g2 { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .hero-sub {
+      font-size: 15px; color: var(--sub);
+      max-width: 520px; margin: 0 auto 38px;
+      line-height: 1.75; font-weight: 400;
+      animation: fadeDown .5s .14s ease both;
+    }
+
+    /* ── SLIDESHOW ── */
+    .slideshow-wrap {
       position: relative;
+      width: 100%; max-width: 700px;
+      margin: 0 auto 40px;
+      border-radius: 18px;
       overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: 0 24px 60px rgba(0,0,0,.25);
+      animation: fadeDown .5s .2s ease both;
     }
-
-    .dl-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(0,229,255,0.05), transparent);
+    .slides { position: relative; height: 340px; }
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px;
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: opacity .7s cubic-bezier(.4,0,.2,1);
+      padding: 24px;
     }
+    .slide.active { opacity: 1; }
 
-    .dl-btn:hover {
-      border-color: rgba(0,229,255,0.4);
-      transform: translateY(-2px);
-    }
+    /* Slide visual backgrounds */
+    .slide-1 { background: linear-gradient(135deg, #0a1628 0%, #0f2040 50%, #0a1628 100%); }
+    .slide-2 { background: linear-gradient(135deg, #071420 0%, #0d2035 50%, #071420 100%); }
+    .slide-3 { background: linear-gradient(135deg, #0c1a10 0%, #0f2918 50%, #0c1a10 100%); }
+    .slide-4 { background: linear-gradient(135deg, #1a1006 0%, #2a1a08 50%, #1a1006 100%); }
 
-    .dl-btn:hover::after { opacity: 1; }
+    [data-theme="light"] .slide-1 { background: linear-gradient(135deg, #dceeff 0%, #c8e0ff 50%, #dceeff 100%); }
+    [data-theme="light"] .slide-2 { background: linear-gradient(135deg, #d0e8f8 0%, #bbd4f0 50%, #d0e8f8 100%); }
+    [data-theme="light"] .slide-3 { background: linear-gradient(135deg, #d4f0e4 0%, #bde4cf 50%, #d4f0e4 100%); }
+    [data-theme="light"] .slide-4 { background: linear-gradient(135deg, #fff0d4 0%, #fde4b8 50%, #fff0d4 100%); }
 
-    .dl-btn.primary {
-      background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(124,58,237,0.1));
-      border-color: rgba(0,229,255,0.3);
-    }
-
-    .dl-icon {
-      font-size: 28px;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-
-    .dl-info { flex: 1; }
-    .dl-os {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    .dl-size {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .dl-arrow {
-      font-size: 18px;
-      color: var(--accent);
-      opacity: 0.6;
-    }
-
-    /* CHANGELOG */
-    .changelog-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 36px;
-      margin-bottom: 20px;
-      animation: fadeUp 0.6s 0.4s ease both;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .changelog-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .changelog-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 14px;
-      line-height: 1.5;
-      color: #b0b0c0;
-    }
-
-    .change-tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      flex-shrink: 0;
-      margin-top: 2px;
-      font-weight: 500;
-    }
-
-    .tag-new { background: rgba(0,214,143,0.15); color: var(--success); }
-    .tag-fix { background: rgba(255,179,0,0.15); color: var(--warn); }
-    .tag-improve { background: rgba(0,229,255,0.1); color: var(--accent); }
-
-    /* HISTORY */
-    .history-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 36px;
-      animation: fadeUp 0.6s 0.5s ease both;
-    }
-
-    .history-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 16px;
-    }
-
-    .history-item:last-child { border-bottom: none; }
-
-    .history-ver {
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      font-weight: 500;
+    .slide-icon { font-size: 64px; filter: drop-shadow(0 8px 24px rgba(0,0,0,.4)); }
+    .slide-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px; font-weight: 700; letter-spacing: -.5px;
       color: var(--text);
     }
+    .slide-desc { font-size: 13px; color: var(--sub); max-width: 380px; text-align: center; line-height: 1.6; }
 
-    .history-date {
-      font-family: 'DM Mono', monospace;
+    /* SVG rebar illustration in slide */
+    .rebar-svg { width: 100%; max-width: 340px; }
+
+    /* slide dots */
+    .slide-dots {
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px; z-index: 10;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,.3);
+      cursor: pointer;
+      transition: all .3s;
+    }
+    .dot.active { width: 20px; background: var(--accent); }
+
+    /* progress bar */
+    .slide-progress {
+      position: absolute; bottom: 0; left: 0;
+      height: 2px; background: var(--accent);
+      transition: none;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px; margin-bottom: 40px;
+      animation: fadeDown .5s .28s ease both;
+    }
+    .feat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: border-color var(--trans), transform var(--trans), box-shadow var(--trans);
+      position: relative; overflow: hidden;
+    }
+    .feat::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity var(--trans);
+    }
+    .feat:hover { border-color: rgba(59,130,246,.4); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.15); }
+    .feat:hover::before { opacity: 1; }
+    .feat-icon { font-size: 26px; margin-bottom: 12px; }
+    .feat-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .feat-desc { font-size: 12px; color: var(--sub); line-height: 1.6; }
+
+    /* ── DOWNLOAD CARD ── */
+    .dl-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px;
+      margin-bottom: 14px;
+      position: relative; overflow: hidden;
+      animation: fadeUp .5s .32s ease both;
+      transition: border-color var(--trans);
+    }
+    .dl-card:hover { border-color: rgba(59,130,246,.3); }
+    .dl-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+      opacity: .6;
+    }
+    .card-head {
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .ver-tag {
+      font-family: 'Fira Code', monospace;
       font-size: 11px;
+      background: rgba(59,130,246,.12); color: var(--accent);
+      border: 1px solid rgba(59,130,246,.2);
+      padding: 3px 10px; border-radius: 4px;
+      display: inline-block; margin-bottom: 8px;
+    }
+    .app-name-big {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px; font-weight: 800; letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+    .app-tagline { font-size: 13px; color: var(--sub); }
+    .rel-date {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px; color: var(--muted);
+      text-align: right; white-space: nowrap;
+    }
+
+    .stats-row {
+      display: flex; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .stat { flex: 1; padding: 14px 16px; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 9px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;
+    }
+    .stat-val { font-size: 15px; font-weight: 700; }
+
+    .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .dl-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      text-decoration: none; color: var(--text);
+      transition: all var(--trans);
+      cursor: pointer;
+    }
+    .dl-btn.primary {
+      background: linear-gradient(135deg, rgba(59,130,246,.16), rgba(6,182,212,.08));
+      border-color: rgba(59,130,246,.3);
+    }
+    .dl-btn:hover { border-color: rgba(59,130,246,.5); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+    .dl-icon { font-size: 28px; flex-shrink: 0; }
+    .dl-info { flex: 1; }
+    .dl-os { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .dl-size { font-family: 'Fira Code', monospace; font-size: 11px; color: var(--muted); }
+    .dl-arrow { color: var(--accent); font-size: 16px; }
+
+    /* ── CHANGELOG ── */
+    .changelog-card, .hist-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin-bottom: 14px;
+      transition: border-color var(--trans);
+    }
+    .changelog-card { animation: fadeUp .5s .38s ease both; }
+    .hist-card      { animation: fadeUp .5s .44s ease both; }
+    .changelog-card:hover, .hist-card:hover { border-color: rgba(59,130,246,.2); }
+
+    .sec-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
       color: var(--muted);
-      flex: 1;
-      text-align: center;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
     }
+    .sec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .history-dl {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid rgba(0,229,255,0.2);
-      padding: 4px 12px;
-      border-radius: 4px;
-      transition: all 0.2s;
+    .cl-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .cl-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.55; color: var(--sub); }
+    .ctag {
+      font-family: 'Fira Code', monospace;
+      font-size: 9px; padding: 3px 7px; border-radius: 3px;
+      flex-shrink: 0; margin-top: 3px; font-weight: 600; letter-spacing: .5px;
     }
+    .t-new { background: rgba(16,185,129,.15); color: var(--success); }
+    .t-fix { background: rgba(245,158,11,.15);  color: var(--warn); }
+    .t-imp { background: rgba(59,130,246,.12);  color: var(--accent); }
 
-    .history-dl:hover {
-      background: rgba(0,229,255,0.1);
+    .hist-row {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
     }
+    .hist-row:last-child { border-bottom: none; }
+    .hist-ver { font-family: 'Fira Code', monospace; font-size: 13px; font-weight: 500; }
+    .hist-date { font-family: 'Fira Code', monospace; font-size: 11px; color: var(--muted); flex: 1; text-align: center; }
+    .hist-dl {
+      font-family: 'Fira Code', monospace; font-size: 11px; color: var(--accent);
+      text-decoration: none; border: 1px solid rgba(59,130,246,.2);
+      padding: 4px 12px; border-radius: 4px; transition: all var(--trans);
+    }
+    .hist-dl:hover { background: rgba(59,130,246,.1); }
 
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
       text-align: center;
-      padding: 48px 0 40px;
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
+      padding: 36px 0 32px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px; color: var(--muted);
       border-top: 1px solid var(--border);
-      margin-top: 48px;
+      margin-top: 40px;
     }
-
     footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
 
-    /* LOADING STATE */
-    .loading-placeholder {
-      height: 20px;
-      background: linear-gradient(90deg, var(--border) 25%, rgba(255,255,255,0.05) 50%, var(--border) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 4px;
-      display: inline-block;
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp   { from { opacity: 0; transform: translateY(18px);  } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { flex-wrap: wrap; gap: 10px; }
+      .nav-right { flex-wrap: wrap; }
+      .nav-pill { display: none; }
+      .hero { padding: 44px 0 28px; }
+      .slides { height: 260px; }
+      .slide-icon { font-size: 48px; }
+      .slide-title { font-size: 16px; }
+      .dl-card, .changelog-card, .hist-card { padding: 20px 16px; }
+      .stats-row { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+      .card-head { flex-direction: column; }
+      .rel-date { text-align: left; }
     }
 
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    @media (max-width: 600px) {
-      .hero { padding: 60px 0 40px; }
-      .download-card, .changelog-card, .history-card { padding: 24px 20px; }
-      .card-top { flex-direction: column; }
-      .release-date { text-align: left; }
-    }
+    /* i18n hidden */
+    [data-lang="vi"] .en { display: none !important; }
+    [data-lang="en"] .vi { display: none !important; }
   </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="container">
+  <!-- NAV -->
   <nav>
-    <div class="logo">My<span>App</span></div>
-    <div class="nav-tag">download center</div>
+    <div class="logo">
+      <div class="logo-mark">🧱</div>
+      <div class="logo-name">Struct<span class="accent">Pro</span></div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-pill">
+        <span class="vi">tra cứu cốt thép bê tông</span>
+        <span class="en">reinforced concrete tool</span>
+      </div>
+      <!-- Language -->
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('vi')">VI</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+      <!-- Theme -->
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme" id="theme-icon">🌙</button>
+    </div>
   </nav>
 
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge" id="latest-badge">Đang tải...</div>
-    <h1>Tải xuống<br/><span class="highlight">phiên bản mới nhất</span></h1>
-    <p>Luôn cập nhật. Ổn định. Nhanh chóng. Chọn nền tảng của bạn bên dưới.</p>
+    <div class="hero-badge" id="latest-badge">
+      <div class="pulse-dot"></div>
+      <span class="vi">Đang tải phiên bản mới nhất…</span>
+      <span class="en">Loading latest version…</span>
+    </div>
+
+    <h1>
+      <span class="g1 vi">Tra Cứu Cốt Thép</span>
+      <span class="g1 en">Reinforced Concrete</span>
+      <br/>
+      <span class="g2 vi">Bê Tông Chuyên Nghiệp</span>
+      <span class="g2 en">Rebar Design Tool</span>
+    </h1>
+
+    <p class="hero-sub vi">Phần mềm hỗ trợ kỹ sư kết cấu tra cứu cốt thép trong bê tông — kiểm tra chiều dài neo, chiều dài nối, hàm lượng cốt thép và tư vấn sử dụng Lenton coupler thông minh.</p>
+    <p class="hero-sub en">Software for RC structural engineers — rebar lookup, development &amp; lap splice length check, reinforcement ratio validation, and smart Lenton coupler advisor.</p>
+
+    <!-- SLIDESHOW -->
+    <div class="slideshow-wrap">
+      <div class="slides" id="slides">
+
+        <!-- Slide 1: Tra thép -->
+        <div class="slide slide-1 active" data-index="0">
+          <div class="slide-icon">🔩</div>
+          <div class="slide-title vi">Tra Cốt Thép Nhanh Chóng</div>
+          <div class="slide-title en">Rebar Lookup in Seconds</div>
+          <div class="slide-desc vi">Chọn đường kính cốt thép (Ø6–Ø50), tra tiết diện, khối lượng dài và tải trọng tính toán theo TCVN 5574:2018.</div>
+          <div class="slide-desc en">Select rebar diameter (Ø6–Ø50), retrieve cross-section area, unit weight and design capacity per TCVN 5574:2018.</div>
+          <svg class="rebar-svg" viewBox="0 0 340 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="rb" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3b82f6"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <!-- rebars -->
+            <rect x="0"   y="24" width="340" height="12" rx="6" fill="url(#rb)" opacity=".9"/>
+            <rect x="0"   y="42" width="340" height="12" rx="6" fill="url(#rb)" opacity=".7"/>
+            <rect x="0"   y="6"  width="340" height="8"  rx="4" fill="url(#rb)" opacity=".5"/>
+            <!-- stirrups -->
+            <rect x="20"  y="2"  width="6" height="56" rx="3" fill="#06b6d4" opacity=".6"/>
+            <rect x="80"  y="2"  width="6" height="56" rx="3" fill="#06b6d4" opacity=".6"/>
+            <rect x="140" y="2"  width="6" height="56" rx="3" fill="#06b6d4" opacity=".6"/>
+            <rect x="200" y="2"  width="6" height="56" rx="3" fill="#06b6d4" opacity=".6"/>
+            <rect x="260" y="2"  width="6" height="56" rx="3" fill="#06b6d4" opacity=".6"/>
+            <rect x="314" y="2"  width="6" height="56" rx="3" fill="#06b6d4" opacity=".6"/>
+          </svg>
+        </div>
+
+        <!-- Slide 2: Neo & nối -->
+        <div class="slide slide-2" data-index="1">
+          <div class="slide-icon">📐</div>
+          <div class="slide-title vi">Chiều Dài Neo & Nối Cốt Thép</div>
+          <div class="slide-title en">Development & Lap Splice Length</div>
+          <div class="slide-desc vi">Tính chiều dài neo cốt thép vào bê tông và chiều dài nối chồng đúng TCVN — cảnh báo ngay khi không đạt.</div>
+          <div class="slide-desc en">Calculate rebar development length into concrete and lap splice length per TCVN — instant pass/fail warnings.</div>
+          <svg class="rebar-svg" viewBox="0 0 340 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- beam -->
+            <rect x="10" y="28" width="150" height="14" rx="4" fill="#3b82f6" opacity=".85"/>
+            <!-- hook -->
+            <path d="M160 35 Q190 35 190 55 Q190 65 180 65 L140 65" stroke="#3b82f6" stroke-width="10" fill="none" stroke-linecap="round" opacity=".85"/>
+            <!-- dimension arrow -->
+            <line x1="10" y1="20" x2="190" y2="20" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <polygon points="10,17 10,23 3,20" fill="#06b6d4"/>
+            <polygon points="190,17 190,23 197,20" fill="#06b6d4"/>
+            <text x="100" y="16" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="JetBrains Mono,monospace">Ld = 45d</text>
+            <!-- second bar -->
+            <rect x="180" y="28" width="150" height="14" rx="4" fill="#10b981" opacity=".75"/>
+            <text x="255" y="22" text-anchor="middle" font-size="10" fill="#10b981" font-family="JetBrains Mono,monospace">Ls = 38d</text>
+            <line x1="180" y1="20" x2="330" y2="20" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <polygon points="180,17 180,23 173,20" fill="#10b981"/>
+            <polygon points="330,17 330,23 337,20" fill="#10b981"/>
+          </svg>
+        </div>
+
+        <!-- Slide 3: Hàm lượng -->
+        <div class="slide slide-3" data-index="2">
+          <div class="slide-icon">📊</div>
+          <div class="slide-title vi">Kiểm Tra Hàm Lượng Cốt Thép</div>
+          <div class="slide-title en">Reinforcement Ratio Check</div>
+          <div class="slide-desc vi">Tự động so sánh hàm lượng cốt thép thực tế với giới hạn ρmin/ρmax cho phép của tiết diện bê tông.</div>
+          <div class="slide-desc en">Automatically compares actual reinforcement ratio against ρmin/ρmax limits for the concrete section.</div>
+          <svg class="rebar-svg" viewBox="0 0 340 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- bar chart: ρmin, ρcurrent, ρmax -->
+            <rect x="40"  y="30" width="40" height="30" rx="3" fill="#10b981" opacity=".8"/>
+            <text x="60" y="26" text-anchor="middle" font-size="9" fill="#10b981" font-family="JetBrains Mono,monospace">ρmin</text>
+            <text x="60" y="68" text-anchor="middle" font-size="8" fill="#4a6b8a" font-family="JetBrains Mono,monospace">0.2%</text>
+
+            <rect x="140" y="10" width="40" height="50" rx="3" fill="#3b82f6" opacity=".9"/>
+            <text x="160" y="6" text-anchor="middle" font-size="9" fill="#3b82f6" font-family="JetBrains Mono,monospace">ρcur</text>
+            <text x="160" y="68" text-anchor="middle" font-size="8" fill="#4a6b8a" font-family="JetBrains Mono,monospace">2.8%</text>
+
+            <rect x="240" y="20" width="40" height="40" rx="3" fill="#f59e0b" opacity=".8"/>
+            <text x="260" y="16" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="JetBrains Mono,monospace">ρmax</text>
+            <text x="260" y="68" text-anchor="middle" font-size="8" fill="#4a6b8a" font-family="JetBrains Mono,monospace">3.0%</text>
+
+            <!-- warning arrow -->
+            <line x1="155" y1="10" x2="235" y2="20" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <polygon points="232,15 238,22 226,22" fill="#ef4444"/>
+          </svg>
+        </div>
+
+        <!-- Slide 4: Lenton -->
+        <div class="slide slide-4" data-index="3">
+          <div class="slide-icon">🔗</div>
+          <div class="slide-title vi">Tư Vấn Lenton Coupler</div>
+          <div class="slide-title en">Lenton Coupler Advisor</div>
+          <div class="slide-desc vi">Gợi ý loại Lenton coupler phù hợp khi hàm lượng cốt thép vượt giới hạn hoặc không đủ chiều dài nối chồng.</div>
+          <div class="slide-desc en">Recommends the right Lenton coupler type when rebar ratio exceeds limits or lap splice space is insufficient.</div>
+          <svg class="rebar-svg" viewBox="0 0 340 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- bar left -->
+            <rect x="10" y="22" width="120" height="16" rx="5" fill="#f59e0b" opacity=".85"/>
+            <!-- coupler -->
+            <rect x="128" y="16" width="84" height="28" rx="6" fill="#3b82f6" opacity=".9"/>
+            <rect x="134" y="20" width="72" height="20" rx="4" fill="#1e3a5f" opacity=".6"/>
+            <text x="170" y="33" text-anchor="middle" font-size="9" fill="#93c5fd" font-family="JetBrains Mono,monospace" font-weight="600">LENTON</text>
+            <!-- bar right -->
+            <rect x="210" y="22" width="120" height="16" rx="5" fill="#f59e0b" opacity=".85"/>
+            <!-- thread lines -->
+            <line x1="128" y1="22" x2="128" y2="38" stroke="#60a5fa" stroke-width="1.5"/>
+            <line x1="212" y1="22" x2="212" y2="38" stroke="#60a5fa" stroke-width="1.5"/>
+          </svg>
+        </div>
+
+      </div><!-- /slides -->
+
+      <!-- Dots -->
+      <div class="slide-dots" id="slide-dots">
+        <div class="dot active" onclick="goSlide(0)"></div>
+        <div class="dot" onclick="goSlide(1)"></div>
+        <div class="dot" onclick="goSlide(2)"></div>
+        <div class="dot" onclick="goSlide(3)"></div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="slide-progress" id="slide-progress" style="width:0%"></div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">🔩</div>
+        <div class="feat-title vi">Tra Cốt Thép RC</div>
+        <div class="feat-title en">RC Rebar Lookup</div>
+        <div class="feat-desc vi">Tra nhanh thông số cốt thép trong bê tông theo đường kính — diện tích, khối lượng, cường độ CB300-V, CB400-V.</div>
+        <div class="feat-desc en">Quickly look up RC rebar properties by diameter — area, weight, grade CB300-V / CB400-V.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📐</div>
+        <div class="feat-title vi">Neo & Nối Trong Bê Tông</div>
+        <div class="feat-title en">Development & Splice</div>
+        <div class="feat-desc vi">Tính chiều dài neo cốt thép vào bê tông và chiều dài nối chồng theo TCVN 5574:2018.</div>
+        <div class="feat-desc en">Compute rebar development length into concrete and lap splice per TCVN 5574:2018.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title vi">Hàm Lượng Cốt Thép</div>
+        <div class="feat-title en">Reinforcement Ratio</div>
+        <div class="feat-desc vi">Kiểm tra ρ thực tế so với ρmin/ρmax, cảnh báo vượt hàm lượng và đề xuất Lenton.</div>
+        <div class="feat-desc en">Check actual ρ vs ρmin/ρmax limits, warn on over-reinforcement and suggest Lenton alternatives.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">✨</div>
+        <div class="feat-title vi">Giao Diện Thông Minh</div>
+        <div class="feat-title en">Smart Interface</div>
+        <div class="feat-desc vi">Trực quan, hỗ trợ hai ngôn ngữ, dark/light mode và hình minh họa bê tông cốt thép.</div>
+        <div class="feat-desc en">Intuitive bilingual UI with dark/light mode and RC-specific illustrations.</div>
+      </div>
+    </div>
   </section>
 
   <!-- DOWNLOAD CARD -->
-  <div class="download-card">
-    <div class="card-top">
-      <div class="app-info">
-        <div class="version-badge" id="version-label">v0.0.0</div>
-        <div class="app-name" id="app-name">MyApp</div>
-        <div class="app-desc" id="app-desc">Đang tải thông tin phiên bản...</div>
+  <div class="dl-card">
+    <div class="card-head">
+      <div>
+        <div class="ver-tag" id="ver-tag">v0.0.0</div>
+        <div class="app-name-big">Struct Pro</div>
+        <div class="app-tagline" id="app-tagline">
+          <span class="vi">Đang tải thông tin…</span>
+          <span class="en">Loading release info…</span>
+        </div>
       </div>
-      <div class="release-date" id="release-date">—</div>
+      <div class="rel-date" id="rel-date">—</div>
     </div>
 
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-label">Kích thước</div>
-        <div class="stat-val" id="file-size">—</div>
+        <div class="stat-label"><span class="vi">Phiên bản</span><span class="en">Version</span></div>
+        <div class="stat-val" id="s-ver">—</div>
       </div>
       <div class="stat">
-        <div class="stat-label">Phiên bản</div>
-        <div class="stat-val" id="version-num">—</div>
+        <div class="stat-label"><span class="vi">Kích thước</span><span class="en">Size</span></div>
+        <div class="stat-val" id="s-size">—</div>
       </div>
       <div class="stat">
-        <div class="stat-label">Trạng thái</div>
-        <div class="stat-val" style="color: var(--success)">✓ Stable</div>
+        <div class="stat-label"><span class="vi">Trạng thái</span><span class="en">Status</span></div>
+        <div class="stat-val" style="color:var(--success)">✓ Stable</div>
       </div>
       <div class="stat">
-        <div class="stat-label">Lượt tải</div>
-        <div class="stat-val" id="dl-count">—</div>
+        <div class="stat-label"><span class="vi">Lượt tải</span><span class="en">Downloads</span></div>
+        <div class="stat-val" id="s-dl">—</div>
       </div>
     </div>
 
-    <div class="download-grid" id="download-buttons">
-      <!-- Buttons rendered by JS -->
-    </div>
+    <div class="dl-grid" id="dl-grid"></div>
   </div>
 
   <!-- CHANGELOG -->
   <div class="changelog-card">
-    <div class="section-title">Changelog mới nhất</div>
-    <ul class="changelog-list" id="changelog-list">
-      <li><span class="change-tag tag-new">NEW</span>Đang tải...</li>
+    <div class="sec-title">Changelog</div>
+    <ul class="cl-list" id="cl-list">
+      <li><span class="ctag t-imp">INFO</span>
+        <span class="vi">Đang tải changelog…</span>
+        <span class="en">Loading changelog…</span>
+      </li>
     </ul>
   </div>
 
-  <!-- VERSION HISTORY -->
-  <div class="history-card">
-    <div class="section-title">Lịch sử phiên bản</div>
-    <div id="version-history">
-      <!-- Rendered by JS -->
+  <!-- HISTORY -->
+  <div class="hist-card">
+    <div class="sec-title">
+      <span class="vi">Lịch sử phiên bản</span>
+      <span class="en">Version History</span>
     </div>
+    <div id="hist-body"></div>
   </div>
 
+  <!-- FOOTER -->
   <footer>
-    Powered by <a href="https://github.com" target="_blank">GitHub Releases</a> &nbsp;·&nbsp;
-    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases" target="_blank">Xem tất cả releases</a>
+    <span class="vi">Dành cho <strong style="color:var(--sub)">Kỹ sư Bê Tông Cốt Thép</strong></span>
+    <span class="en">Built for <strong style="color:var(--sub)">RC Structural Engineers</strong></span>
+    &nbsp;·&nbsp;
+    Powered by <a href="https://github.com" target="_blank">GitHub Releases</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases" target="_blank">
+      <span class="vi">Tất cả phiên bản</span>
+      <span class="en">All releases</span>
+    </a>
   </footer>
 </div>
 
 <script>
   // ============================================================
-  // ⚙️ CẤU HÌNH — Thay YOUR_USERNAME và YOUR_REPO của bạn
+  // ⚙️ CONFIG
   // ============================================================
-  const GITHUB_USER = "tranminhhai06102001-tech";
-  const GITHUB_REPO = "myapp-download";
-  const APP_NAME    = "MyApp";
+  const GITHUB_USER = "YOUR_USERNAME";
+  const GITHUB_REPO = "YOUR_REPO";
   // ============================================================
 
+  /* ── THEME ── */
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+  }
+
+  /* ── LANGUAGE ── */
+  function setLang(lang) {
+    document.documentElement.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent === lang.toUpperCase());
+    });
+    updateBadge();
+  }
+
+  /* ── SLIDESHOW ── */
+  const SLIDE_DURATION = 4000; // ms per slide
+  let currentSlide = 0;
+  let slideTimer = null;
+  let progressTimer = null;
+  let progressStart = null;
+
+  function goSlide(idx) {
+    const slides = document.querySelectorAll('.slide');
+    const dots   = document.querySelectorAll('.dot');
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = (idx + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+    resetProgress();
+  }
+
+  function resetProgress() {
+    const bar = document.getElementById('slide-progress');
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    // force reflow
+    bar.getBoundingClientRect();
+    bar.style.transition = `width ${SLIDE_DURATION}ms linear`;
+    bar.style.width = '100%';
+  }
+
+  function startSlideshow() {
+    clearInterval(slideTimer);
+    resetProgress();
+    slideTimer = setInterval(() => {
+      goSlide(currentSlide + 1);
+    }, SLIDE_DURATION);
+  }
+
+  // pause on hover
+  document.addEventListener('DOMContentLoaded', () => {
+    const wrap = document.querySelector('.slideshow-wrap');
+    wrap.addEventListener('mouseenter', () => {
+      clearInterval(slideTimer);
+      document.getElementById('slide-progress').style.transition = 'none';
+    });
+    wrap.addEventListener('mouseleave', () => {
+      startSlideshow();
+    });
+    startSlideshow();
+  });
+
+  /* ── GITHUB API ── */
   const API = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases`;
-
-  // Platform detection map: asset name keywords → icon + label
-  const PLATFORM_MAP = [
-    { keywords: ["windows", "win", ".exe", ".msi"], icon: "🪟", label: "Windows" },
-    { keywords: ["mac", "darwin", ".dmg", ".pkg"],  icon: "🍎", label: "macOS" },
-    { keywords: ["linux", ".deb", ".rpm", ".appimage"], icon: "🐧", label: "Linux" },
-    { keywords: [".apk"], icon: "🤖", label: "Android" },
-    { keywords: [".ipa"], icon: "📱", label: "iOS" },
-    { keywords: [".zip", ".tar.gz", ".tar.xz"],     icon: "📦", label: "Tất cả nền tảng" },
+  const PLAT = [
+    {kw:["windows","win",".exe",".msi"], icon:"🪟", label:"Windows"},
+    {kw:["mac","darwin",".dmg",".pkg"],  icon:"🍎", label:"macOS"},
+    {kw:["linux",".deb",".rpm",".appimage"], icon:"🐧", label:"Linux"},
+    {kw:[".apk"], icon:"🤖", label:"Android"},
+    {kw:[".zip",".tar.gz"], icon:"📦", label:"All Platforms"},
   ];
 
-  function detectPlatform(name) {
-    const lower = name.toLowerCase();
-    for (const p of PLATFORM_MAP) {
-      if (p.keywords.some(k => lower.includes(k))) return p;
-    }
-    return { icon: "💾", label: name };
+  const getPlatform = n => { const l=n.toLowerCase(); return PLAT.find(p=>p.kw.some(k=>l.includes(k)))||{icon:"💾",label:n}; };
+  const fmtSize = b => { if(!b)return"—"; const m=b/1024/1024; return m>=1?m.toFixed(1)+" MB":(b/1024).toFixed(0)+" KB"; };
+  const fmtDate = (s,lang) => new Date(s).toLocaleDateString(lang==="vi"?"vi-VN":"en-US",{year:"numeric",month:"long",day:"numeric"});
+  const fmtN    = n => !n?"0":n>=1000?(n/1000).toFixed(1)+"k":""+n;
+
+  let latestRelease = null;
+
+  function getLang() { return document.documentElement.getAttribute('data-lang') || 'vi'; }
+
+  function updateBadge() {
+    if (!latestRelease) return;
+    const lang = getLang();
+    const badge = document.getElementById('latest-badge');
+    const prefix = lang === 'vi' ? '🚀 Phiên bản mới nhất: ' : '🚀 Latest version: ';
+    badge.innerHTML = `<div class="pulse-dot"></div>${prefix}${latestRelease.tag_name}`;
   }
 
-  function fmtSize(bytes) {
-    if (!bytes) return "—";
-    const mb = bytes / 1024 / 1024;
-    return mb >= 1 ? mb.toFixed(1) + " MB" : (bytes / 1024).toFixed(0) + " KB";
-  }
-
-  function fmtDate(iso) {
-    return new Date(iso).toLocaleDateString("vi-VN", { year: "numeric", month: "long", day: "numeric" });
-  }
-
-  function fmtCount(n) {
-    if (!n) return "0";
-    return n >= 1000 ? (n / 1000).toFixed(1) + "k" : n.toString();
-  }
-
-  async function loadReleases() {
+  async function load() {
     try {
-      const res = await fetch(API, { headers: { Accept: "application/vnd.github+json" } });
-      if (!res.ok) throw new Error("API error " + res.status);
-      const releases = await res.json();
-      if (!releases.length) throw new Error("No releases found");
-
-      const latest = releases[0];
-      renderLatest(latest);
-      renderHistory(releases.slice(1, 6));
-    } catch (e) {
-      document.getElementById("latest-badge").textContent = "Lỗi tải dữ liệu";
-      document.getElementById("app-desc").textContent = e.message + ". Kiểm tra cấu hình GITHUB_USER/REPO.";
+      const res = await fetch(API, {headers:{Accept:"application/vnd.github+json"}});
+      if (!res.ok) throw new Error("GitHub API error " + res.status + ". Please update GITHUB_USER/REPO in index.html");
+      const data = await res.json();
+      if (!data.length) throw new Error("No releases found in this repo.");
+      latestRelease = data[0];
+      renderLatest(data[0]);
+      renderHist(data.slice(1, 6));
+    } catch(e) {
+      document.getElementById("latest-badge").innerHTML = `<div class="pulse-dot" style="background:var(--danger)"></div>⚠ ${e.message}`;
     }
   }
 
   function renderLatest(r) {
-    document.title = `${APP_NAME} ${r.tag_name} — Download`;
-    document.getElementById("app-name").textContent = APP_NAME;
-    document.getElementById("latest-badge").textContent = `🚀 Phiên bản mới nhất: ${r.tag_name}`;
-    document.getElementById("version-label").textContent = r.tag_name;
-    document.getElementById("version-num").textContent = r.tag_name;
-    document.getElementById("app-desc").textContent = r.name || `Phiên bản ${r.tag_name}`;
-    document.getElementById("release-date").textContent = "📅 " + fmtDate(r.published_at);
+    const lang = getLang();
+    updateBadge();
+    document.getElementById("ver-tag").textContent = r.tag_name;
+    document.getElementById("s-ver").textContent   = r.tag_name;
+    document.getElementById("app-tagline").textContent = r.name || "Struct Pro " + r.tag_name;
+    document.getElementById("rel-date").textContent = "📅 " + fmtDate(r.published_at, lang);
+    document.getElementById("s-dl").textContent    = fmtN(r.assets.reduce((a,x) => a+(x.download_count||0), 0));
+    document.getElementById("s-size").textContent  = fmtSize(r.assets.reduce((a,x) => a+(x.size||0), 0));
 
-    const totalDL = r.assets.reduce((a, x) => a + (x.download_count || 0), 0);
-    const totalSize = r.assets.reduce((a, x) => a + (x.size || 0), 0);
-    document.getElementById("dl-count").textContent = fmtCount(totalDL);
-    document.getElementById("file-size").textContent = fmtSize(totalSize);
-
-    // Buttons
-    const grid = document.getElementById("download-buttons");
+    const grid = document.getElementById("dl-grid");
     grid.innerHTML = "";
     if (!r.assets.length) {
-      grid.innerHTML = `<p style="color:var(--muted);font-size:14px;">Chưa có file đính kèm trong release này.</p>`;
+      grid.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:8px 0">${lang==='vi'?'Chưa có file đính kèm.':'No assets attached to this release.'}</p>`;
     } else {
-      r.assets.forEach((asset, i) => {
-        const plat = detectPlatform(asset.name);
+      r.assets.forEach((a, i) => {
+        const p = getPlatform(a.name);
         const btn = document.createElement("a");
-        btn.href = asset.browser_download_url;
-        btn.className = "dl-btn" + (i === 0 ? " primary" : "");
-        btn.innerHTML = `
-          <div class="dl-icon">${plat.icon}</div>
-          <div class="dl-info">
-            <div class="dl-os">${plat.label}</div>
-            <div class="dl-size">${fmtSize(asset.size)} · ${fmtCount(asset.download_count)} lượt</div>
-          </div>
-          <div class="dl-arrow">↓</div>
-        `;
+        btn.href = a.browser_download_url;
+        btn.className = "dl-btn" + (i===0?" primary":"");
+        const dlLabel = lang==='vi' ? 'lượt' : 'dls';
+        btn.innerHTML = `<div class="dl-icon">${p.icon}</div><div class="dl-info"><div class="dl-os">${p.label}</div><div class="dl-size">${fmtSize(a.size)} · ${fmtN(a.download_count)} ${dlLabel}</div></div><div class="dl-arrow">↓</div>`;
         grid.appendChild(btn);
       });
     }
 
-    // Changelog from release body
-    const changelogEl = document.getElementById("changelog-list");
-    changelogEl.innerHTML = "";
-    if (r.body && r.body.trim()) {
-      const lines = r.body.trim().split("\n").filter(l => l.trim());
-      lines.slice(0, 8).forEach(line => {
+    const cl = document.getElementById("cl-list");
+    cl.innerHTML = "";
+    const lines = (r.body||"").trim().split("\n").map(l=>l.trim()).filter(Boolean);
+    if (lines.length) {
+      lines.slice(0, 10).forEach(line => {
         const li = document.createElement("li");
-        let tag = "improve", tagLabel = "IMPROVE";
-        const lower = line.toLowerCase();
-        if (lower.includes("new") || lower.includes("thêm") || lower.includes("add")) { tag = "new"; tagLabel = "NEW"; }
-        else if (lower.includes("fix") || lower.includes("sửa") || lower.includes("bug")) { tag = "fix"; tagLabel = "FIX"; }
-        const text = line.replace(/^[-*#\d.]+\s*/, "").trim();
-        li.innerHTML = `<span class="change-tag tag-${tag}">${tagLabel}</span>${text}`;
-        changelogEl.appendChild(li);
+        const lo = line.toLowerCase();
+        let cls = "t-imp", lbl = lang==='vi'?"CẢI TIẾN":"IMPROVE";
+        if (lo.includes("new")||lo.includes("thêm")||lo.includes("add"))  { cls="t-new"; lbl=lang==='vi'?"MỚI":"NEW"; }
+        else if (lo.includes("fix")||lo.includes("sửa")||lo.includes("bug")) { cls="t-fix"; lbl=lang==='vi'?"SỬA":"FIX"; }
+        li.innerHTML = `<span class="ctag ${cls}">${lbl}</span>${line.replace(/^[-*#\d.]+\s*/,"").trim()}`;
+        cl.appendChild(li);
       });
     } else {
-      changelogEl.innerHTML = `<li><span class="change-tag tag-new">NEW</span>Phiên bản ${r.tag_name} đã phát hành. Xem chi tiết trên GitHub.</li>`;
+      const lbl = lang==='vi' ? `MỚI` : `NEW`;
+      const msg = lang==='vi' ? `Phiên bản ${r.tag_name} đã ra mắt.` : `Version ${r.tag_name} released.`;
+      cl.innerHTML = `<li><span class="ctag t-new">${lbl}</span>${msg}</li>`;
     }
   }
 
-  function renderHistory(releases) {
-    const container = document.getElementById("version-history");
+  function renderHist(releases) {
+    const lang = getLang();
+    const c = document.getElementById("hist-body");
     if (!releases.length) {
-      container.innerHTML = `<p style="color:var(--muted);font-size:14px;">Chưa có lịch sử phiên bản.</p>`;
+      c.innerHTML = `<p style="color:var(--muted);font-size:13px">${lang==='vi'?'Chưa có lịch sử phiên bản.':'No version history yet.'}</p>`;
       return;
     }
-    container.innerHTML = releases.map(r => {
-      const firstAsset = r.assets[0];
-      const dlUrl = firstAsset ? firstAsset.browser_download_url : r.html_url;
-      return `
-        <div class="history-item">
-          <div class="history-ver">${r.tag_name}</div>
-          <div class="history-date">${fmtDate(r.published_at)}</div>
-          <a href="${dlUrl}" class="history-dl">Tải xuống</a>
-        </div>`;
+    const dlLabel = lang==='vi' ? 'Tải xuống' : 'Download';
+    c.innerHTML = releases.map(r => {
+      const url = (r.assets[0]||{}).browser_download_url || r.html_url;
+      return `<div class="hist-row">
+        <div class="hist-ver">${r.tag_name}</div>
+        <div class="hist-date">${fmtDate(r.published_at, lang)}</div>
+        <a href="${url}" class="hist-dl">${dlLabel}</a>
+      </div>`;
     }).join("");
   }
 
-  loadReleases();
+  load();
 </script>
 </body>
 </html>
