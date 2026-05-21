@@ -115,7 +115,7 @@ body{
 .e-dot{width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,var(--din),var(--sia));animation:pulse 2.2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(.5)}}
 
-/* BIG HERO TEXT — XenSnip style */
+/* BIG HERO TEXT */
 .hero-h1{
   font-size:clamp(52px,7vw,96px);
   font-weight:600;
@@ -139,7 +139,7 @@ body{
   margin-bottom:40px;
 }
 
-.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .btn-main{
   display:inline-flex;align-items:center;gap:9px;padding:14px 28px;
   border-radius:10px;background:var(--hi);color:var(--bg);
@@ -348,7 +348,8 @@ body{
       <p class="hero-sub vi">Phần mềm máy tính để bàn cho kỹ sư kết cấu — tra cứu và kiểm tra cốt thép bê tông theo DIN EN 1992-1-1 và SIA 262:2013.</p>
       <p class="hero-sub en">Desktop software for structural engineers — rebar lookup and verification per DIN EN 1992-1-1 and SIA 262:2013.</p>
       <div class="cta-row">
-        <a class="btn-main" href="#">
+        <!-- FIX: added class "dl-btn" so fetchRelease() updates this href too -->
+        <a class="btn-main dl-btn" href="https://github.com/Struct-Pro/download/releases/latest">
           <svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5M3 20h18"/></svg>
           <span class="vi">Tải xuống miễn phí</span>
           <span class="en">Download free</span>
@@ -645,6 +646,7 @@ async function fetchRelease(){
       if(asset) break;
     }
     const dlUrl = asset ? asset.browser_download_url : d.html_url;
+    // Update ALL download buttons (hero + page-4)
     document.querySelectorAll('.dl-btn').forEach(btn=>{ btn.href = dlUrl; });
     if(version){
       document.querySelectorAll('.gh-version').forEach(el=>{
